@@ -44,3 +44,11 @@
   --font-size-lg: 17px;  --font-size-xl: 20px;
   --font-size-2xl: 24px; --font-size-3xl: 30px;
 }
+/* 强行给手机外壳套个紧箍咒 */
+.phone-shell, #phone-wrapper {
+  max-width: 430px; /* 限制最大宽度 */
+  max-height: 932px; /* 限制最大高度 */
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
