@@ -61,9 +61,4 @@
     max-width: 100% !important;
     height: auto !important;
   }
-  
-  /* 新增：隐藏底部黑条和浮动按钮 */
-  .float, .bottom-bar, [class*="float"], [class*="bottom"] {
-    display: none !important;
-  }
 }
