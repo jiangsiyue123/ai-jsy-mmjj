@@ -182,6 +182,7 @@ async function runNovelAiGeneration(input: ImageGenerationRequest): Promise<{ st
     const apiKey = input.apiKey?.trim();
     const model = input.model?.trim() || NOVELAI_DEFAULT_MODEL;
     const prompt = input.prompt?.trim();
+    const baseUrl = input.baseUrl?.trim();
 
     if (!apiKey) return { status: 400, body: { error: "缺少 NovelAI API Token" } };
     if (!prompt) return { status: 400, body: { error: "缺少提示词" } };
@@ -208,7 +209,15 @@ async function runNovelAiGeneration(input: ImageGenerationRequest): Promise<{ st
 
     const { width, height } = getNovelAiResolution(input.size);
 
-    const url = "https://image.novelai.net/ai/generate-image";
+    let url = "https://image.novelai.net/ai/generate-image";
+    if (baseUrl) {
+      const trimmedBase = baseUrl.replace(/\/+$/, "");
+      if (trimmedBase.endsWith("/ai/generate-image")) {
+        url = trimmedBase;
+      } else {
+        url = `${trimmedBase}/ai/generate-image`;
+      }
+    }
     const headers: Record<string, string> = {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",

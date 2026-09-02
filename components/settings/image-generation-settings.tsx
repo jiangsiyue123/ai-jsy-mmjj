@@ -131,6 +131,7 @@ export function ImageGenerationSettings() {
         const activePreset = presets.find(p => p.id === nai?.activePresetId) || presets[0];
         return {
             apiKey: nai?.apiKey || "",
+            baseUrl: nai?.baseUrl || "",
             activePresetId: activePreset.id,
             presets,
             activePreset,
@@ -142,6 +143,7 @@ export function ImageGenerationSettings() {
             ...settings,
             novelai: {
                 apiKey: naiSettings.apiKey,
+                baseUrl: naiSettings.baseUrl,
                 activePresetId: naiSettings.activePresetId,
                 presets: naiSettings.presets,
                 ...patch,
@@ -233,7 +235,7 @@ export function ImageGenerationSettings() {
         }
         setIsFetchingNaiModels(true);
         try {
-            const fetched = await fetchNovelAiModels(naiSettings.apiKey);
+            const fetched = await fetchNovelAiModels(naiSettings.apiKey, naiSettings.baseUrl);
             setNaiModels(fetched);
             setNaiTokenStatus({
                 success: true,
@@ -340,6 +342,20 @@ export function ImageGenerationSettings() {
                 {settings.provider === "novelai" ? (
                     /* --- NovelAI 配置面板 --- */
                     <>
+                        <div className="flex flex-col gap-1">
+                            <label className="menu-desc ml-1">NovelAI API Base URL</label>
+                            <Input
+                                type="text"
+                                value={naiSettings.baseUrl}
+                                onChange={(event) => {
+                                    updateNovelAi({ baseUrl: event.target.value });
+                                    setNaiTokenStatus(null);
+                                }}
+                                placeholder="https://image.novelai.net"
+                            />
+                            <span className="menu-desc ml-1">留空使用官方地址。使用第三方中转时填入您的中转链接。</span>
+                        </div>
+
                         <div className="flex flex-col gap-1">
                             <label className="menu-desc ml-1">NovelAI API Token</label>
                             <Input
